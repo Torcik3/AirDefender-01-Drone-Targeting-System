@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 class PidController {
 private:
     double Kp, Ki, Kd;

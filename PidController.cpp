@@ -15,7 +15,6 @@ double PidController::calculatePid(double setpoint, double currentValue, double 
     p = error * Kp;
     d = (error-preError)*Kd/dt;
     i = Ki*integralError;
-
     preError=error;
 
     return p + i + d;

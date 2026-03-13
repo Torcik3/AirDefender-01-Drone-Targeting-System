@@ -10,10 +10,7 @@ A high-performance **C++20** PID controller specifically designed for intercepto
 
 ## Quick Start
 ```bash
-
 mkdir build && cd build
-cmake ..
-
-cmake --build .
-./MES_Solver
+cmake .. && cmake --build .
+./AirDefenderTests
 ```

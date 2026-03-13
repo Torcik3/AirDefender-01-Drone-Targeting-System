@@ -12,5 +12,5 @@ A high-performance **C++20** PID controller specifically designed for intercepto
 ```bash
 mkdir build && cd build
 cmake .. && cmake --build .
-./AirDefenderTests
+./drone_pidcontroler
 ```

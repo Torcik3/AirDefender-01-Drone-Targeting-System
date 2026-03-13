@@ -1,11 +1,11 @@
 #include <iostream>
 #include <fstream>
-#include "PidController.h"
+#include "src/include/PidController.h"
 #include "vector/Vector.h"
-#include "drone.h"
-#include "target.h"
+#include "src/include/drone.h"
+#include "src/include/target.h"
 
- void runSim(Drone& drone,Target& rocket, PidController& pidx, PidController& pidy, Vector<Vector2D>& historyDrone, Vector<Vector2D>& historyTarget) {
+void runSim(Drone& drone,Target& rocket, PidController& pidx, PidController& pidy, Vector<Vector2D>& historyDrone, Vector<Vector2D>& historyTarget) {
 
      double dt=0.001;
      double dist;

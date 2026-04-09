@@ -9,45 +9,6 @@
 #include <mutex>
 #include <thread>
 
-void runSim(Drone& drone,Target& rocket, PidController& pidx, PidController& pidy, Vector<Vector2D>& historyDrone, Vector<Vector2D>& historyTarget) {
-
-     double dt=0.001;
-     double dist;
-     double max_thrust = 30000.0;
-     Vector2D temp;
-     Vector2D force;
-     Vector2D target;
-    for (int i=0; i<20000; i++) {
-        rocket.update(dt);
-        dist=drone.distance(rocket.getPosition());
-        double closingSpeed = drone.getVeloLength()+rocket.getVeloLength();
-        if (dist< 5) {
-            std::cout << "TARGET INTERCEPTED AT STEP " << i  << std::endl;
-            std::cout << "distance:" << dist << std::endl;
-            break;
-        }
-
-        double dynamicT=dist/closingSpeed;
-        target.x=rocket.getPosition().x+rocket.getVelocity().x*dynamicT;
-        target.y=rocket.getPosition().y+rocket.getVelocity().y*dynamicT;
-
-        temp=drone.getPosition();
-        force.x=pidx.calculatePid(target.x,temp.x, dt);
-        force.y=pidy.calculatePid(target.y,temp.y, dt);
-
-
-        if (force.x > max_thrust) force.x = max_thrust;
-        if (force.x < -max_thrust) force.x = -max_thrust;
-        if (force.y > max_thrust) force.y = max_thrust;
-        if (force.y < -max_thrust) force.y = -max_thrust;
-
-        drone.applyForce(force,dt);
-        historyDrone.PushBack(drone.getPosition());
-        historyTarget.PushBack(rocket.getPosition());
-        //std::cout<<i<<" "<<force.x<<" "<<force.y<<std::endl;
-        //std::cout<<drone.getVelocity().x<<" | "<<drone.getVelocity().y<<" | "<<rocket.getVelocity().x<<" | "<<rocket.getVelocity().y <<std::endl;
-    }
-}
 void exportToTxt(const std::string& fileName,const Vector<Vector2D>& historyDrone , const Vector<Vector2D>& historyTarget) {
 
     std::ofstream file(fileName);
@@ -80,7 +41,7 @@ void spawnTarget(World &world) {
             world.targets.push_back(target);
         }
 
-        std::cout<<"nowy dron"<<std::endl;
+        std::cout<<"nowy target"<<std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }

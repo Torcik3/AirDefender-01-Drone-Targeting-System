@@ -1,6 +1,3 @@
-//
-// Created by torcik on 11.03.2026.
-//
 
 #include "include/target.h"
 

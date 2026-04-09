@@ -17,7 +17,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(AirDefenderTests test/test_pid.cpp src/PidController.cpp src/drone.cpp)
+add_executable(AirDefenderTests test/test_pid.cpp src/PidController.cpp src/drone.cpp
+        src/include/Vector2D.h)
 
 target_link_libraries(AirDefenderTests gtest_main)
 

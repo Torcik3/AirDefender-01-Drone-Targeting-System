@@ -1,9 +1,13 @@
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <vector>
 #include "src/include/PidController.h"
 #include "vector/Vector.h"
 #include "src/include/drone.h"
 #include "src/include/target.h"
+#include <mutex>
+#include <thread>
 
 void runSim(Drone& drone,Target& rocket, PidController& pidx, PidController& pidy, Vector<Vector2D>& historyDrone, Vector<Vector2D>& historyTarget) {
 
@@ -29,7 +33,7 @@ void runSim(Drone& drone,Target& rocket, PidController& pidx, PidController& pid
 
         temp=drone.getPosition();
         force.x=pidx.calculatePid(target.x,temp.x, dt);
-        force.y=pidy.calculatePid(target.y,temp.y, dt)+drone.getMass()*9.81;
+        force.y=pidy.calculatePid(target.y,temp.y, dt);
 
 
         if (force.x > max_thrust) force.x = max_thrust;
@@ -44,7 +48,6 @@ void runSim(Drone& drone,Target& rocket, PidController& pidx, PidController& pid
         //std::cout<<drone.getVelocity().x<<" | "<<drone.getVelocity().y<<" | "<<rocket.getVelocity().x<<" | "<<rocket.getVelocity().y <<std::endl;
     }
 }
-
 void exportToTxt(const std::string& fileName,const Vector<Vector2D>& historyDrone , const Vector<Vector2D>& historyTarget) {
 
     std::ofstream file(fileName);
@@ -62,17 +65,34 @@ void exportToTxt(const std::string& fileName,const Vector<Vector2D>& historyDron
 
 }
 
+struct World {
+   std::vector<std::shared_ptr<Drone>> drones;
+    std::vector<std::shared_ptr<Target>> targets;
+    std::mutex mtx;
+    bool running=true;
+};
+
+void spawnTarget(World &world) {
+    while (world.running) {
+        {
+            std::lock_guard<std::mutex> lock(world.mtx);
+            std::shared_ptr<Target> target=std::make_shared<Target>(Vector2D(0,0),Vector2D(0,1000));
+            world.targets.push_back(target);
+        }
+
+        std::cout<<"nowy dron"<<std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+}
+
+
+
 int main() {
-
-    Drone drone(90,Vector2D(0.0,0.0));
-    PidController pidx(300.0, 0.5, 300.0, 5000.0);
-    PidController pidy(300.0, 0.5, 300.0, 5000.0);
-    Vector<Vector2D> historyDrone;
-    Vector<Vector2D> historyTarget;
-    Target rocket(Vector2D(15000,1000),Vector2D(-1000,0));
-
-    runSim(drone,rocket,pidx,pidy,historyDrone,historyTarget);
-    exportToTxt("trajectory.txt", historyDrone, historyTarget);
-
+World world;
+    std::thread t1(spawnTarget,std::ref(world));
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+world.running=false;
+    t1.join();
+    std::cout << "Koniec programu Celow: " << world.targets.size() << std::endl;
     return 0;
 }

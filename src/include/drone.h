@@ -1,9 +1,9 @@
 #pragma once
 #include <cmath>
 #include <memory>
-
 #include "target.h"
 #include "pidcontroller.h"
+#include "Vector2D.h"
 
 class Drone {
 private:
@@ -13,6 +13,7 @@ private:
     std::shared_ptr<Target> target;
     PidController pidX;
     PidController pidY;
+    bool isDestroyed=false;
 
 public:
     Drone(double mass,Vector2D position,PidController x,PidController y): mass(mass), position(position), velocity(0.0, 0.0), pidX(x), pidY(y) {}
@@ -22,10 +23,13 @@ public:
     double getMass() const { return mass; }
     double getVeloLength() const { return sqrt(velocity.x*velocity.x + velocity.y*velocity.y); }
     double distance(Vector2D position);
-    void setTarget(const std::shared_ptr<Target> &target) {this->target = target;}
+    void setTarget( std::shared_ptr<Target> target) {
+        this->target = target;
+        target->isTargeted=true;
+    }
     std::shared_ptr<Target> getTarget() const { return target; }
     void update(const double &dt);
-
+    bool getIsDestroyed() const { return isDestroyed; }
 
 
 };

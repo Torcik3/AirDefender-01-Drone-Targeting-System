@@ -2,7 +2,6 @@
 
 #include <cmath>
 
-
 void Drone::applyForce(Vector2D force, double dt) {
 
     if (dt <= 0) return;
@@ -25,6 +24,7 @@ double Drone::distance(Vector2D positionComp) {
     return sqrt(dx*dx + dy*dy);
 }
 void Drone::update(const double &dt) {
+    if (!target) return;
     double max_thrust = 30000.0;
     double dist = distance(target->getPosition());
     double closingSpeed = getVeloLength() + target->getVeloLength();
@@ -41,5 +41,12 @@ void Drone::update(const double &dt) {
     if (force.x < -max_thrust) force.x = -max_thrust;
     if (force.y > max_thrust) force.y = max_thrust;
     if (force.y < -max_thrust) force.y = -max_thrust;
+
+
+    if (dist< 5) {
+        this->isDestroyed = true;
+        target->isDestroyed= true;
+    }
+
     applyForce(force, dt);
 }

@@ -10,7 +10,8 @@ protected:
 
 class DroneFixture : public ::testing::Test {
     protected:
-    Drone drone{1,Vector2D(0.0,0.0)};
+    PidController pid{0.0, 0.0, 1.5,100};
+    Drone drone{1,Vector2D(0.0,0.0),pid,pid};
 };
 
 TEST_F(PidControllerFixture, DerivativeActionReactsToRateOfChange) {

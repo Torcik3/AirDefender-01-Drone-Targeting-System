@@ -8,6 +8,7 @@ add_executable(drone_pidcontroler main.cpp
         src/PidController.cpp
         src/target.cpp
         src/include/target.h
+        src/Simulation.cpp
 )
 include(FetchContent)
 FetchContent_Declare(
@@ -18,7 +19,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 add_executable(AirDefenderTests test/test_pid.cpp src/PidController.cpp src/drone.cpp
-        src/include/Vector2D.h)
+        src/include/Vector2D.h
+        src/Simulation.cpp
+        src/include/Simulation.h
+        src/include/World.h
+        src/exportToFile.cpp
+        src/include/exportToFile.h)
 
 target_link_libraries(AirDefenderTests gtest_main)
 

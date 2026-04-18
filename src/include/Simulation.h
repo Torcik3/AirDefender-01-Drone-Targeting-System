@@ -2,7 +2,6 @@
 #ifndef DRONE_PIDCONTROLER_SIMULATION_H
 #define DRONE_PIDCONTROLER_SIMULATION_H
 #include <thread>
-
 #include "World.h"
 
 
@@ -19,7 +18,7 @@ public:
     void start();
     void run();
     void stop();
-
+    World& getWorld() {return world;}
 };
 
 

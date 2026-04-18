@@ -9,17 +9,17 @@ void Simulation::spawnTarget() {
     while (world.running) {
         {
             std::lock_guard<std::mutex> lock(world.mtx);
-            std::shared_ptr<Target> target=std::make_shared<Target>(Vector2D(0,0),Vector2D(0,1000));
+            std::shared_ptr<Target> target=std::make_shared<Target>(Vector2D(30000,30000),Vector2D(-300,-350));
             world.targets.PushBack(target);
         }
 
         std::cout<<"nowy target"<<std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(30000));
     }
 }
 void Simulation::spawnDrone() {
-    PidController pidx(300.0, 0.5, 300.0, 5000.0);
-    PidController pidy(300.0, 0.5, 300.0, 5000.0);
+    PidController pidx(20.0, 0.5, 80.0, 30000.0);
+    PidController pidy(20.0, 0.5, 80.0, 30000.0);
 
     while (world.running) {
         {
@@ -86,7 +86,7 @@ void Simulation::run() {
                 }
 
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
         }
     }

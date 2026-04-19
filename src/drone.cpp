@@ -43,8 +43,14 @@ void Drone::update(const double &dt) {
     double closingSpeed = std::sqrt(relativeVelocity.x * relativeVelocity.x + relativeVelocity.y * relativeVelocity.y);
     if (closingSpeed < 0.1) closingSpeed = 0.1;
     double dynamicT = dist / closingSpeed;
-    if (dynamicT > 10) {
-        dynamicT = 15;
+    if (dynamicT > 1) {
+        dynamicT = 1;
+    }
+    else if (dynamicT<0.5) {
+        dynamicT = 0.02;
+    }
+    else if (dynamicT<0.2) {
+        dynamicT = 0.001;
     }
     Vector2D predictedTargetPos;
     predictedTargetPos.x = target->getPosition().x + target->getVelocity().x * dynamicT;

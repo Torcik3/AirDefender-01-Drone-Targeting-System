@@ -4,22 +4,29 @@
 #include <thread>
 #include "../vector/Vector.h"
 #include <chrono>
-
+#include "include/MathUtils.h"
+#include <random>
 void Simulation::spawnTarget() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<double> dist(0.0, 360.0);
     while (world.running) {
         {
             std::lock_guard<std::mutex> lock(world.mtx);
-            std::shared_ptr<Target> target=std::make_shared<Target>(Vector2D(30000,30000),Vector2D(-300,-350));
+            double randomAngle=dist(gen);
+            Vector2D spawnPos=MathUtils::pointsOnCircle(Vector2D(0,0),39000,randomAngle*M_PI/180);
+            Vector2D vecVelo=MathUtils::calVelToPoint(spawnPos,Vector2D(0.0,0.0),500);
+            std::shared_ptr<Target> target=std::make_shared<Target>(spawnPos,vecVelo);
             world.targets.PushBack(target);
         }
 
         std::cout<<"nowy target"<<std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(30000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
     }
 }
 void Simulation::spawnDrone() {
-    PidController pidx(20.0, 0.5, 80.0, 30000.0);
-    PidController pidy(20.0, 0.5, 80.0, 30000.0);
+    PidController pidx(15.0, 0.0, 56.0, 100000.0);
+    PidController pidy(15.0, 0.0, 56.0, 100000.0);
 
     while (world.running) {
         {

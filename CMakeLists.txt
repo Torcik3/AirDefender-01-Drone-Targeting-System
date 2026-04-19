@@ -33,7 +33,8 @@ add_executable(AirDefenderTests test/test_pid.cpp src/PidController.cpp src/dron
         src/exportToFile.cpp
         src/include/exportToFile.h
         src/Visualizer.cpp
-        src/include/Visualizer.h)
+        src/include/Visualizer.h
+        src/include/MathUtils.h)
 
 target_link_libraries(AirDefenderTests gtest_main)
 target_link_libraries(drone_pidcontroler PRIVATE sfml-graphics sfml-window sfml-system)

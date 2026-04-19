@@ -5,7 +5,7 @@ The system combines physics-based guidance, concurrent processing, custom data s
 
 ---
 
-## 📸 Preview
+##  Preview
 
 ![AirDefender Radar Interface](docs/radar.png)
 
